@@ -1,0 +1,59 @@
+/* src/App.css */
+
+.App {
+  /*
+    Garante que o componente App ocupe 100% da altura
+    dentro do #root ou #app, que já está em 100% no index.css.
+    Isso é crucial para que o Flexbox abaixo funcione.
+  */
+  min-height: 100%;
+  
+  /* Usa Flexbox para organizar o conteúdo verticalmente */
+  display: flex;
+  flex-direction: column; 
+  
+  /* Centraliza o conteúdo (se a aplicação for menor que a tela) */
+  align-items: center; 
+  
+  /* Opção para limitar a largura máxima do conteúdo central */
+  /* max-width: 1200px; */
+  /* margin: 0 auto; */
+}
+
+/*
+  A classe 'App-header' ou 'main-content' seria
+  onde a maioria do seu conteúdo ficaria.
+  Usar 'flex-grow: 1' é uma técnica comum para forçar 
+  o conteúdo principal a preencher todo o espaço restante 
+  entre um cabeçalho e um rodapé fixos.
+*/
+.main-content {
+  flex-grow: 1; /* Ocupa todo o espaço vertical disponível */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
+}
+
+/*
+  Estilo de exemplo para um cabeçalho, se ele estiver dentro do App.js
+*/
+.App-header {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+  /* background-color: rgba(255, 255, 255, 0.1); */ /* Um fundo levemente transparente */
+}
+
+/*
+  Estilo de exemplo para um rodapé
+*/
+.App-footer {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  /* border-top: 1px solid rgba(255, 255, 255, 0.2); */
+}
+
+table {
+  color: black;
+}

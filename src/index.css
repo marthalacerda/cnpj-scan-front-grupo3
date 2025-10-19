@@ -1,0 +1,32 @@
+/* src/index.css */
+
+html, body {
+  height: 100%; 
+  margin: 0;
+  padding: 0;
+  
+  
+  overflow-x: hidden; /* Remove barras de rolagem horizontais indesejadas */
+}
+
+body {
+  /* Aplicqação do gradiente */
+  background: linear-gradient(
+    to bottom,
+    #1D94F0 0%,       /* Início do gradiente (topo) */
+    #1D94F0 78%,      /* A cor #1D94F0 domina até 78% da altura */
+    #036DC5 100%      /* A transição finaliza em #036DC5 na base */
+  );
+  
+  /* Configurações de fonte */
+  font-family: Arial, sans-serif;
+  color: white; /* Cor do texto */
+}
+
+#root, #app {
+  height: 100%;
+}
+
+input::placeholder {
+  color: white;   /* Cor da placehold do selectbox */
+}
