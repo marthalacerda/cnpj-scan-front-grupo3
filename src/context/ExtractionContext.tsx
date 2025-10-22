@@ -1,23 +1,29 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { ExtractResponse } from '@/api/cnpj';
+import { createContext, useState, useContext, FC, ReactNode, useCallback } from 'react';
+import { ExtractBatchResponse, SingleFileResult } from '@/api/cnpj';
 
 
-// Estado inicial do arquivo upado (antes da extração dos dados)
-interface UploadedFile {
-    id: string; // para identificar o arquivo
-    name: string;
-    fileObject: File; // o objeto real do arquivo, p usar depois
-    isProcessed: boolean;
-    result?: ExtractResponse; // preenchido apos a extração
-}
+// Interface do estado é uma lista de resultados da extração
+export type GlobalResultsState = SingleFileResult[];
 
 // 1. Define o formato do Contexto
 interface ExtractionContextType {
-    uploadedFiles: UploadedFile[];
+    
+    // O estado é uma lista de resultados ou uma lista vazia
+    processedResults: GlobalResultsState;
+
+    // Salvar o lote de resultados
+    setProcessedResults: (results: GlobalResultsState) => void;
+
+    // Função para adicionar arquivos (HomePage)
     addFile: (file: File) => void;
-    updateFileResult: (id: string, result: ExtractResponse) => void;
-    // extractionResult: ExtractResponse | null;
-    // setExtractionResult: (result: ExtractResponse | null) => void;
+
+    // Lista temporária de arquivos antes do processamento (LoadingPage)
+    uploadedFilesTemp: File[];
+
+    // Função para limpar a fila temporária (após o processamento)
+    clearUploadedFilesTemp: () => void;
+
+    resetBatch: () => void;
 }
 
 // 2. Cria o Contexto (valor padrão)
@@ -28,39 +34,69 @@ interface ExtractionProviderProps {
     children: ReactNode;
 }
 
-export const ExtractionProvider: React.FC<ExtractionProviderProps> = ({ children }) => {
+export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) => {
 
-    // Armazena o resultado em um estado
-    const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+    // Armazena o resultado final do lote (uso para ProcessPage/ReportPage)
+    const [processedResults, setProcessedResults] = useState<GlobalResultsState>([]);
 
-    const addFile = (file: File) => {
-        const newFile: UploadedFile = {
-            id: Date.now().toString(), // id simples e unico
-            name: file.name,
-            fileObject: file,
-            isProcessed: false,
-        };
-        setUploadedFiles(prev => [...prev, newFile]);
-    };
+    // Armazena os objetos File antes de ir pra API
+    const [uploadedFilesTemp, setUploadedFilesTemp] = useState<File[]>([]);
 
-    const updateFileResult = (id: string, result: ExtractResponse) => {
-        setUploadedFiles(prev => prev.map(f =>
-            f.id === id ? { ...f, isProcessed: true, result: result } : f
-        ));
+    // Função para limpar a fila (usada após o processamento)
+    const clearUploadedFilesTemp = useCallback(() => {
+        setUploadedFilesTemp([]);
+    }, []);
+
+    // Função para adicionar arquivos (limpa o estado anterior de resultado)
+    const addFile = useCallback((file: File) => {
+        // Zera o resultado anterior quando um novo lote começa a ser upado
+        setProcessedResults([]);
+        setUploadedFilesTemp([file]);
+    }, []);
+
+    const resetBatch = useCallback(() => {
+        setProcessedResults([]);
+        setUploadedFilesTemp([]);
+    }, []);
+
+    // Função para salvar o resultado final do backend - os dados extraídos
+    const setBatchResults = useCallback((results: ExtractBatchResponse) => {
+        setProcessedResults(results); // Salva o resultado final
+    }, []);
+
+    const addNewFileToTemp = useCallback((file: File) => {
+        setUploadedFilesTemp(prev => [...prev, file]);
+    }, []);
+
+    const contextValue = {
+        processedResults,
+        setProcessedResults: setBatchResults,
+        uploadedFilesTemp,
+        addFile: addNewFileToTemp,
+        clearUploadedFilesTemp,
+        resetBatch
     };
 
     return (
-        <ExtractionContext.Provider value={{ uploadedFiles, addFile, updateFileResult }}>
+
+        // Passamos a função de salvar lote
+        <ExtractionContext.Provider value={contextValue}>
             {children}
         </ExtractionContext.Provider>
     );
-};
+};    
+
 
 // 4. Cria o hook customizado para usar o contexto facilmente
 export const useExtraction = ()  => {
+
     const context = useContext(ExtractionContext);
+    
     if (context == undefined) {
+
         throw new Error('useExtraction deve ser usado dentro de um ExtractionProvider');
+    
     }
+    
     return context;
 };

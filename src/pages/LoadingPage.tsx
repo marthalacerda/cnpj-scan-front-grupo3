@@ -1,66 +1,71 @@
-// src/pages/LoadingPage.tsx
-
-import { Box, Spinner, Heading, VStack, Text } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; // Pega o ID da URL
+import { Spinner, Heading, VStack, Text } from '@chakra-ui/react';
+import { useEffect, FC } from 'react';
+import { useNavigate } from 'react-router-dom'; // Pega o ID da URL
 import { useExtraction } from '@/context/ExtractionContext';
-import { extractDataFromPDF } from '@/api/cnpj'; // A função de extração
+import { extractBatchDataFromPDFs } from '@/api/cnpj'; // A função de extração
+// import { getCsvReport } from '@/api/reports';
 
-const LoadingPage: React.FC = () => {
-    const { fileId } = useParams<{ fileId: string }>(); // Pega o ID
-    const { uploadedFiles, updateFileResult } = useExtraction();
+const LoadingPage: FC = () => {
+
+    // Pega a fila temporária e as funções de manipulação do estado global
+    const { setProcessedResults, uploadedFilesTemp, clearUploadedFilesTemp } = useExtraction();
+
     const navigate = useNavigate();
 
-    // Encontra o arquivo original no estado
-    const fileToProcess = uploadedFiles.find(f => f.id === fileId);
+    // Lógica para saber quantos arquivos estão na fila
+    const filesToProcessCount = uploadedFilesTemp.length;
     
     useEffect(() => {
-        if (!fileToProcess || fileToProcess.isProcessed) {
-            // Se já processado ou não encontrado, vai para o status (Page 4)
-            navigate(`/resultado/${fileId}`);
-            return;
-        }
+
+        // Safety check: Se, por algum motivo, a lista de arquivos a processar estiver vazia aqui, saia.
+        if (filesToProcessCount === 0) return; 
 
         const runExtraction = async () => {
-            const fileObject = fileToProcess.fileObject;
+
+            const fileObjects = uploadedFilesTemp;
+
+            try {
+                // Chamada única para o backend
+                const result = await extractBatchDataFromPDFs(fileObjects);
             
-            // 1. Chama a API de extração
-            const result = await extractDataFromPDF(fileObject);
-            console.log('### ', result)
             if (result.success && result.data) {
-                // 2. Salva o resultado no estado global (Contexto)
-                updateFileResult(fileToProcess.id, result.data); 
+                // Salva a lista bruta de resultados
+                setProcessedResults(result.data); 
             } else {
-                // 3. Trata falhas de rede/API: cria um "erro de processamento" para salvar no estado
-                const dummyErrorResult = {
-                    filename: fileToProcess.name,
+                // Trata as falhas na API: cria um resultado de erro para todos os arquivos
+                const errorResult = fileObjects.map(f => ({
+                    filename: f.name,
                     status: result.message,
-                    error: result.message
-                } as any; // Usamos 'any' temporariamente para simplificar
-                updateFileResult(fileToProcess.id, dummyErrorResult);
+                    error: true
+                }));
+                setProcessedResults(errorResult);
             }
             
-            // 4. Navega para a Page 4 (Resultado/Status)
-            navigate(`/resultado/${fileToProcess.id}`);
+            // Limpa a fila TEMP e navega para a Page (Resultado/Status)
+            clearUploadedFilesTemp();
+            navigate(`/resultado`);
+            
+            } catch (error) {
+                console.error("Erro fatal na extração:", error);
+                // Em caso de erro total, ainda navegamos para mostrar o erro
+                navigate(`/resultado`);
+            }
         };
 
+        // Roda apenas na montagem, desde que tenha arquivos na fila
         runExtraction();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fileId, fileToProcess?.isProcessed, navigate]); // Roda apenas quando o componente monta
+    }, [filesToProcessCount, navigate, setProcessedResults, clearUploadedFilesTemp]);
 
-    if (!fileToProcess) {
-        return <Text color="red">Arquivo não encontrado.</Text>;
-    }
-
+    
     // UI de Loading
     return (
-        <VStack w="100%" h="100%" align="center" justify="center" spacing={8}>
-            <Spinner size="xl" color="white" thickness="4px" />
-            <Heading size="xl">Processando Dados do Arquivo...</Heading>
+        <VStack w="100%" h="100%" align="center" justify="center">
+            <Spinner size="xl" color="white" />
+            <Heading size="xl">Processando dados dos ({filesToProcessCount}) arquivos...</Heading>
+            
             <Text fontSize="lg">
-                <Text as="span" fontWeight="bold">{fileToProcess.name}</Text>
+                Aguarde, extração de dados em andamento.
             </Text>
-            {/* Opcional: Adicionar a "figurinha animada" aqui */}
         </VStack>
     );
 };

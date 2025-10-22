@@ -1,68 +1,114 @@
-import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Button, Heading, Flex, Text, VStack } from '@chakra-ui/react';
+import { useState, useMemo, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/ui/header'; 
 import Footer from '../components/ui/footer';
+import SelectBox from '@/components/ui/selectbox';
+import Tabela from '@/components/ui/tabela';
 import { useExtraction } from '@/context/ExtractionContext';
+import { FIELD_KEYS, AVAILABLE_FIELDS } from '@/constants/fields';
 
-const ProcessPage: React.FC = () => {
-    const { extractionResult } = useExtraction();
+
+const ProcessPage: FC = () => {
+
+    // Pega diretamente o array de resultados da extração
+    const { processedResults } = useExtraction();
     const navigate = useNavigate();
 
-    // Se não há dados, manda o usuário de volta para o upload
-    if (!extractionResult) {
-        // Redireciona de volta para a HomePage se acessar diretamente
+    // Estado local para armazenar os campos selecionados
+    const [selectedFields, setSelectedFields] = useState<string[]>([]);
+
+    // Lógica de Status
+    // Arquivos válidos não tem a flag "error" do backend
+    const validFilesForReport = useMemo(() => {
+        return processedResults.filter(file => !file.error);
+    }, [processedResults]);
+
+    // O total é o número de resultados que recebemos
+    const totalProcessedCount = processedResults.length;
+    
+    // Safety check
+    if (totalProcessedCount === 0) {
+
+        // Se a navegação pra cá falhou, não tem resultado, volta pra home
         navigate('/');
-        return null; 
+        return null;
     }
 
-    const { filename, status, extracted_data } = extractionResult;
-    
-    const handleNextStep = () => {
-        // Lógica futura: chamar o endpoint que usa 'extracted_data'
-        alert("Botão clicado! Próximo passo em desenvolvimento.");
+    // Criação da função de atualização que será passada para o SelectBox
+    const handleFieldsUpdate = (fields: string[]) => {
+        setSelectedFields(fields);
     };
+
+    // Criação do dataset para a Tabela
+    const tableStatusData = useMemo(() => {
+        return processedResults.map(file => ({
+            id: processedResults.indexOf(file),
+            name: file.filename,
+            status: file.status,
+            hasError: file.error || false,
+        }));
+    }, [processedResults]);
+
+    // Regra de negócio: Nenhum campo selecionado = todos os campos na tabela
+    const handleNextStep = () => {
+        let fieldsToSend: string[] = selectedFields.length === 0 ? FIELD_KEYS : selectedFields;
+        navigate('/relatorio', { state: { selectedFields: fieldsToSend } });
+    };
+
+    // Verifica se a tabela está vazia
+    // const isTableEmpty = tableStatusData.length === 0;
     
     return (
-        <VStack w="100%" h="100%" align="center" justify="start" gap="10px"> 
+        <VStack w="100%" h="100%" align="center" justify="start" gap="10px">
+
             <Header title="CNPJ Scan" />
 
             <Box flexGrow={1} p={8} w="100%" textAlign="center">
                 
-                <Heading size="2xl" mb={6}>
+                <Heading size="3xl" mb={8}>
                     Processamento Concluído
                 </Heading>
 
-                {/* Nome do Arquivo */}
-                <Text fontSize="xl" mb={2} fontWeight="bold">
-                    Arquivo: {filename}
-                </Text>
+                {/* INJEÇÃO 1: Tabela de status */}
+                <Flex align="center" justify="center" mb={8}>
+                    <Tabela data={tableStatusData} />
+                </Flex>
 
-                {/* Status da Extração */}
-                <Text fontSize="lg" color="green.300" mb={8}>
-                    Status: {status}
+                {/* Informação sobre quantos arquivos foram válidos */}
+                <Text fontSize="lg" mb={8} color={validFilesForReport.length > 0 ? 'green.300' : 'red.300'}>
+                    {validFilesForReport.length} de {totalProcessedCount} arquivos prontos para o relatório CSV.
                 </Text>
                 
-                {/* Visualização de Dados (apenas para exemplo) */}
-                <VStack spacing={2} align="center" maxW="400px" mx="auto" p={4} borderRadius="lg" bg="rgba(0,0,0,0.1)">
-                    <Text fontWeight="bold">Dados Extraídos (Exemplo):</Text>
-                    {/* Aqui você mostraria uma tabela ou cards com os dados */}
-                    {extracted_data.numero_de_inscricao && (
-                        <Text>CNPJ: {extracted_data.numero_de_inscricao}</Text>
+
+                {/* INJEÇÃO 2: SelectBox se tiver arquivos válidos */}
+                <Flex align="center" justify="center" mb={8}>
+                    {validFilesForReport.length > 0 ? (
+                        <SelectBox
+                            availableFields={FIELD_KEYS}
+                            selectedFields={selectedFields}
+                            onFieldsChange={handleFieldsUpdate}
+                            fieldMapping={AVAILABLE_FIELDS}
+                        />
+                    ) : (
+                        // Mensagem de erro se não tiver arquivos válidos
+                        <Text color="red.300" fontSize="lg">
+                            Nenhum arquivo válido para configuração de relatório.
+                        </Text>
                     )}
-                    {extracted_data.nome_empresarial && (
-                        <Text>Nome empresarial: {extracted_data.nome_empresarial}</Text>
-                    )}
-                </VStack>
+                    
+                </Flex>
 
                 {/* Botão para o Próximo Passo */}
                 <Button
                     mt={10}
                     size="lg"
                     onClick={handleNextStep}
+                    disabled={validFilesForReport.length === 0}
+                    // isDisabled={validFilesForReport.length === 0}
                     // Adicione isLoading, etc. se necessário
                 >
-                    Próximo Passo / Enviar Dados
+                    Gerar Tabela CSV
                 </Button>
                 
             </Box>

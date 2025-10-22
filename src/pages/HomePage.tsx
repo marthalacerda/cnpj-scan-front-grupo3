@@ -1,34 +1,51 @@
 import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import { useRef, useState, FC, useEffect } from 'react';
 import Header from '../components/ui/header';
 import Footer from '../components/ui/footer';
-// import MeuBotao from '../components/ui/button';
 import Txtespec from '../components/ui/text_descriptions';
-import { extractDataFromPDF, uploadFileToBackend } from '@/api/cnpj';
 import { useNavigate } from 'react-router-dom';
 import { useExtraction } from '@/context/ExtractionContext';
+// import MeuBotao from '../components/ui/button';
+// import { extractBatchDataFromPDFs, uploadFileToBackend } from '@/api/cnpj';
 
 
-function HomePage() {
+const HomePage: FC = () => {
 
-    // hooks de contexto e navegação
+    // Hooks de contexto e navegação
     const navigate = useNavigate(); // inicia o hook de navegação
-    const { addFile } = useExtraction(); // add o arquivo ao contexto
+    const { addFile, resetBatch } = useExtraction(); // add o arquivo ao contexto
     
-    // hooks de estado local
+    // Hooks de estado local
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     
+    useEffect(() => {
+        resetBatch();
+    }, [resetBatch]);
+
     // 📁 Quando o arquivo é selecionado
     const handleFileSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsLoading(true); // inicia o loading
         console.log('1. [LOG DE EVENTO] handleFileSelection foi chamado!');
-        const file = event.target.files?.[0];
-        if (file) {
-            // add o arquivo ao estado global
-            addFile(file);
+        
+        const files = event.target.files;
+        
+        if (files && files.length > 0) {
+            // resetBatch();
+            console.log(`2. [LOG DE ARQUIVO] ${files.length} arquivos detectados.`);
+            
+            // Limpa estado e add arquivos temporariamente
+            Array.from(files).forEach(file => {
+                addFile(file);
+            });
+
             // navega para a lista de arquivos page2
             navigate('/arquivos');
+
+        } else {
+            setIsLoading(false);
         }
+
         event.target.value = ''; // limpa input
     };
 
@@ -78,6 +95,7 @@ textAlign="center"
             onChange={handleFileSelection}
             style={{ display: 'none' }}
             accept=".pdf"
+            multiple
           />
 
           {/* 🟢 Botão de seleção de arquivo */}
@@ -85,11 +103,11 @@ textAlign="center"
             colorPalette="gray"
             size="lg"
             onClick={handleButtonClick}
-            isLoading={isLoading}
-            loadingText="Enviando..."
+            loading={isLoading}
+            loadingText="Carregando arquivos..."
             variant="surface"
           >
-            Selecionar Arquivo PDF
+            Selecionar Arquivos PDF
           </Button>
  </Flex>
  <Txtespec/>

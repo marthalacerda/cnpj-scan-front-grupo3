@@ -1,29 +1,36 @@
-// src/pages/FileListPage.tsx
-
 import { Box, Button, Heading, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/ui/header'; 
 import Footer from '../components/ui/footer';
 import { useExtraction } from '@/context/ExtractionContext';
+import Tabela from '@/components/ui/tabela';
 
-const FileListPage: React.FC = () => {
-    const { uploadedFiles } = useExtraction();
+const FileListPage: FC = () => {
+
+    // Usa a lista TEMP que tem os objetos File
+    const { uploadedFilesTemp } = useExtraction();
     const navigate = useNavigate();
 
-    // Pegamos o último arquivo upado para o foco de UX
-    const latestFile = uploadedFiles[uploadedFiles.length - 1]; 
+    // Cria o dataset para a tabela: apenas o nome e id
+    const fileListData = useMemo(() => {
+        return uploadedFilesTemp.map((file, index) => ({
+            id: (index + 1),
+            name: file.name,
+            status: "Carregado", // status e hasError não vão aparecer - precisa para não dar erro
+            hasError: false,
+        }));
+    }, [uploadedFilesTemp]);
 
-    // Se a lista estiver vazia (acesso direto), volta
-    if (!latestFile) {
+    // Safety check
+    if (fileListData.length === 0) {
         navigate('/');
         return null;
     }
 
-    // Ação do Botão: Navega para a Page 3 (Processamento)
-    const handleExtract = () => {
-        // Redireciona para a página de status, levando o ID do arquivo na URL
-        navigate(`/status/${latestFile.id}`); 
+    // Ação do Botão: Navega para a LoadingPage
+    const handleExtractAll = () => {
+        navigate(`/status/todos`);
     };
 
     return (
@@ -32,27 +39,31 @@ const FileListPage: React.FC = () => {
 
             <Box flexGrow={1} p={8} w="100%" textAlign="center">
                 <Heading size="2xl" mb={6}>
-                    Arquivo Pronto para Extração
+                    {uploadedFilesTemp.length} arquivos prontos para processar:
                 </Heading>
 
-                {/* Nome do Arquivo */}
-                <Text fontSize="2xl" mb={10} fontWeight="bold" color="yellow.300">
-                    {latestFile.name}
-                </Text>
+                <VStack 
+                    spacing={3} 
+                    mb={10} 
+                    align="center" 
+                    maxW="lg" 
+                    mx="auto"
+                >
+                    <Tabela
+                        data={fileListData}
+                        isSimpleList={true}
+                    />
+                </VStack>
                 
                 {/* Botão de Extração */}
                 <Button
                     size="lg"
-                    onClick={handleExtract}
+                    onClick={handleExtractAll}
                 >
-                    Extrair Dados do CNPJ
+                    Extrair Dados dos Cartões CNPJ
                 </Button>
                 
-                {/* Opcional: Lista de todos os arquivos upados */}
-                {/* <VStack mt={10}>
-                    {uploadedFiles.map(file => <Text key={file.id}>{file.name}</Text>)}
-                </VStack> */}
-                
+                               
             </Box>
 
             <Footer title="CNPJ Scan" copyrightText="Grupo 3 NEXT" />

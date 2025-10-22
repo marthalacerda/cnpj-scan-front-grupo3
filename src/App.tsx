@@ -3,8 +3,9 @@ import HomePage from './pages/HomePage';
 import { ExtractionProvider } from "./context/ExtractionContext";
 import FileListPage from "./pages/FileListPage";
 import LoadingPage from "./pages/LoadingPage";
-import ResultPage from "./pages/ResultPage";
-// import ProcessPage from './pages/ProcessPage';
+// import ResultPage from "./pages/ResultPage";
+import ReportPage from "./pages/ReportPage";
+import ProcessPage from './pages/ProcessPage';
 // import DownloadPage from './pages/DownloadPage';
 
 function App() {
@@ -14,10 +15,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/arquivos" element={<FileListPage/>} />
-        {/* Rota para o loading, com o ID do arquivo na URL */}
-        <Route path="/status/:fileId" element={<LoadingPage/>} /> 
-        {/* Rota para o resultado, com o ID do arquivo na URL */}
-        <Route path="/resultado/:fileId" element={<ResultPage/>} />
+        <Route path="/status/todos" element={<LoadingPage/>} /> 
+        {/* <Route path="/resultado" element={<ResultPage/>} /> */}
+        <Route path="/resultado" element={<ProcessPage/>} />
+        <Route path="/relatorio" element={<ReportPage/>} />
       </Routes>
     </ExtractionProvider>
   );

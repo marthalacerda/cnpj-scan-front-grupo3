@@ -34,29 +34,38 @@ export interface ExtractedData {
     data_situacao_especial?: string;    
 }
 
-export interface ExtractResponse {
+// Objeto que o backend retorna para cada arquivo
+export interface SingleFileResult {
     filename: string;
     status: string;
     extracted_data?: ExtractedData;
-    error?: string;
+    error?: boolean;    // alterado para boolean em múltiplos
 }
 
-// O objeto de retorno do nosso hook
-export interface ApiResponse {
+// O backend retorna uma lista desses objetos
+export type ExtractBatchResponse = SingleFileResult[];
+
+// O objeto de retorno do nosso hook (contém a lista de resultados)
+export interface BatchApiResponse {
     success: boolean;
     message: string;
-    data?: ExtractResponse;
+    data?: ExtractBatchResponse;
 }
 
 // ----------------------------------------------------
-// 2. FUNÇÃO DE REQUISIÇÃO
+// 2. FUNÇÃO DE REQUISIÇÃO - LOTE DE ARQUIVOS
 // ----------------------------------------------------
 
-export async function extractDataFromPDF(file: File): Promise<ApiResponse> {
-    console.log(`Tentando EXTRAIR POST para ${EXTRACT_DATA_ENDPOINT} com arquivo: ${file.name}`);
+export async function extractBatchDataFromPDFs(files: File[]): Promise<BatchApiResponse> {
+    console.log(`Tentando EXTRAIR POST para ${EXTRACT_DATA_ENDPOINT} com ${files.length} arquivos.`);
 
     const formData = new FormData();
-    formData.append('file', file);
+
+    // Adicionar todos os arquivos no FormData
+    // 'files' vai ser o parâmetro 'files: List[UploadFile] = File(...)' do back
+    files.forEach(file => {
+        formData.append('files', file);
+    });
 
     try {
         const response = await fetch(EXTRACT_DATA_ENDPOINT, {
@@ -71,12 +80,13 @@ export async function extractDataFromPDF(file: File): Promise<ApiResponse> {
             throw new Error(`${detail}`);
         }
 
-        // Tratamento de sucesso (200 ok)
-        const data: ExtractResponse = await response.json();
+        // Tratamento de sucesso (200 ok) - Espera-se uma lista de resultados
+        const data: ExtractBatchResponse = await response.json();
 
         return {
             success: true,
-            message: data.status || "Extração concluída com sucesso.",
+            //message: data.status || "Extração concluída com sucesso.",
+            message: `Processamento de ${data.length} arquivos concluídos`,
             data: data
         };
 
@@ -92,16 +102,6 @@ export async function extractDataFromPDF(file: File): Promise<ApiResponse> {
         };
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
