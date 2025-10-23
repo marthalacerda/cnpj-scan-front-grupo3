@@ -1,4 +1,3 @@
-// src/components/ui/header.tsx (Chakra UI v3.2)
 import React, { FC } from "react";
 import { Flex, Image, Heading, Button } from "@chakra-ui/react";
 import { useColorMode, useColorModeValue } from "./ColorMode";

@@ -24,6 +24,18 @@ const HomePage: FC = () => {
         resetBatch();
     }, [resetBatch]);
 
+
+    // // Redirecionamento
+    // const navigateToQueue = uploadedFilesTemp.length > 0;
+        
+
+    // // Redireciona se a fila não estiver vazia
+    // useEffect(() => {
+    //     if (navigateToQueue) {
+    //         navigate('/arquivos');
+    //     }
+    // }, [navigateToQueue, navigate]);
+
     // 📁 Quando o arquivo é selecionado
     const handleFileSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsLoading(true); // inicia o loading
@@ -40,7 +52,7 @@ const HomePage: FC = () => {
                 addFile(file);
             });
 
-            // navega para a lista de arquivos
+            // navega para a fila de arquivos
             navigate('/arquivos');
 
         } else {

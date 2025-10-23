@@ -14,6 +14,7 @@ interface ExtractionContextType {
     addFile: (file: File) => void;
     clearUploadedFilesTemp: () => void;
     resetBatch: () => void;
+    removeFile: (indexToRemove: number) => void;
 }
 
 
@@ -60,10 +61,13 @@ export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) =>
         setUploadedFilesTemp([]);
     }, []);
 
-    
-    // const addNewFileToTemp = useCallback((file: File) => {
-    //     setUploadedFilesTemp(prev => [...prev, file]);
-    // }, []);
+    // Função para remover arquivo pelo índice
+    const removeFile = useCallback((indexToRemove: number) => {
+        setUploadedFilesTemp(prev =>
+            prev.filter((_, index) => index !== indexToRemove)
+        );
+    }, [])
+   
 
     const contextValue = {
         processedResults,
@@ -71,7 +75,8 @@ export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) =>
         uploadedFilesTemp,
         addFile,
         clearUploadedFilesTemp,
-        resetBatch
+        resetBatch,
+        removeFile
     };
 
     return (
