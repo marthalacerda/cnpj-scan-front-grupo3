@@ -1,8 +1,8 @@
 // src/components/ui/header.tsx (Chakra UI v3.2)
 import React, { FC } from "react";
 import { Flex, Image, Heading, Button } from "@chakra-ui/react";
-import { useColorMode, useColorModeValue } from "./color-mode";
-import MenuHeader from "./historia";
+import { useColorMode, useColorModeValue } from "./ColorMode";
+import MenuHeader from "./Historia";
 import { MdDarkMode } from "react-icons/md";
 import { CiLight } from "react-icons/ci";
 import logoImage from "../../assets/logo.png";

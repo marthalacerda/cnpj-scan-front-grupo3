@@ -1,3 +1,4 @@
+import { getSystemErrorMessage } from "util";
 import { ExtractedData } from "./cnpj";
 import { SingleFileResult } from "./cnpj";
 
@@ -70,3 +71,5 @@ export async function getCsvReport(
     }
 
 }
+
+

@@ -1,8 +1,8 @@
 import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
 import { useRef, useState, FC, useEffect } from 'react';
-import Header from '../components/ui/header';
-import Footer from '../components/ui/footer';
-import Txtespec from '../components/ui/text_descriptions';
+import Header from '@/components/ui/Header';
+import Footer from '@/components/ui/Footer';
+import Txtespec from '@/components/ui/TextDescriptions';
 import { useNavigate } from 'react-router-dom';
 import { useExtraction } from '@/context/ExtractionContext';
 // import MeuBotao from '../components/ui/button';
@@ -19,6 +19,7 @@ const HomePage: FC = () => {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     
+    // Reseta o estado quando a HomePage é montada
     useEffect(() => {
         resetBatch();
     }, [resetBatch]);
@@ -34,12 +35,12 @@ const HomePage: FC = () => {
             // resetBatch();
             console.log(`2. [LOG DE ARQUIVO] ${files.length} arquivos detectados.`);
             
-            // Limpa estado e add arquivos temporariamente
+            // add arquivos temporariamente usando addFile do Contexto
             Array.from(files).forEach(file => {
                 addFile(file);
             });
 
-            // navega para a lista de arquivos page2
+            // navega para a lista de arquivos
             navigate('/arquivos');
 
         } else {

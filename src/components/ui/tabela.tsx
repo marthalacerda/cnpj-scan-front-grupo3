@@ -36,7 +36,7 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
   
   const calculatedHeight = useMemo(() => {
     // cabeçalho + altura de todas as linhas
-    const contentHeight = (1 + data.length) * ROW_HEIGHT_ESTIMATE;
+    const contentHeight = (data.length) * ROW_HEIGHT_ESTIMATE;
 
     // Se a altura calculada for menor que o MÁXIMO, usamos a altura calculada
         // Caso contrário, usamos a altura MÁXIMA para forçar a rolagem.
@@ -62,11 +62,9 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
         <Table.Header fontSize="120%">
           <Table.Row bg="gray.300">
             {/* ⚠️ LÓGICA DE CABEÇALHO CONDICIONAL */}
-            <Table.ColumnHeader color="#036DC5" width="20%"></Table.ColumnHeader>
-            <Table.ColumnHeader color="#036DC5" width={isSimpleList ? "80%" : "40%"}>Arquivo</Table.ColumnHeader>
-            {!isSimpleList && (
-              <Table.ColumnHeader color="#036DC5" width="40%">Status</Table.ColumnHeader>
-            )}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width="20%">Nº</Table.ColumnHeader>)}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width={isSimpleList ? "80%" : "40%"}>Arquivo</Table.ColumnHeader>)}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width="40%">Status</Table.ColumnHeader>)}
           </Table.Row>
         </Table.Header>
 
@@ -75,7 +73,7 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
             <Table.Row key={item.id} bg="white" borderColor="white">
               
               {/* Coluna ID */}
-              <Table.Cell color="#036DC5" fontWeight="bold">{item.id} </Table.Cell>
+              <Table.Cell color="#036DC5" fontWeight="bold">{item.id + 1} </Table.Cell>
 
               {/* Coluna Nome (compartilhada) */}
               <Table.Cell color="#036DC5">{item.name} </Table.Cell>

@@ -2,84 +2,79 @@ import { createContext, useState, useContext, FC, ReactNode, useCallback } from 
 import { ExtractBatchResponse, SingleFileResult } from '@/api/cnpj';
 
 
-// Interface do estado é uma lista de resultados da extração
+// Interface de tipagem - o que o backend retorna (lista de SingleFileResult)
 export type GlobalResultsState = SingleFileResult[];
+
 
 // 1. Define o formato do Contexto
 interface ExtractionContextType {
-    
-    // O estado é uma lista de resultados ou uma lista vazia
     processedResults: GlobalResultsState;
-
-    // Salvar o lote de resultados
     setProcessedResults: (results: GlobalResultsState) => void;
-
-    // Função para adicionar arquivos (HomePage)
-    addFile: (file: File) => void;
-
-    // Lista temporária de arquivos antes do processamento (LoadingPage)
     uploadedFilesTemp: File[];
-
-    // Função para limpar a fila temporária (após o processamento)
+    addFile: (file: File) => void;
     clearUploadedFilesTemp: () => void;
-
     resetBatch: () => void;
 }
 
-// 2. Cria o Contexto (valor padrão)
+
+// 2. Cria o Contexto
 const ExtractionContext = createContext<ExtractionContextType | undefined>(undefined);
 
-// 3. Cria o Provedor do Contexto (Provider)
+
+// 3. Define o Provedor do Contexto
 interface ExtractionProviderProps {
     children: ReactNode;
 }
 
+
+// 4. Cria o Provedor do Contexto
 export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) => {
 
-    // Armazena o resultado final do lote (uso para ProcessPage/ReportPage)
+    // Armazena o resultado final dos arquivos processados
     const [processedResults, setProcessedResults] = useState<GlobalResultsState>([]);
 
     // Armazena os objetos File antes de ir pra API
     const [uploadedFilesTemp, setUploadedFilesTemp] = useState<File[]>([]);
 
+    // Função para salvar o resultado final do backend - os dados extraídos
+    const setBatchResults = useCallback((results: ExtractBatchResponse) => {
+        setProcessedResults(results);
+    }, []);
+
     // Função para limpar a fila (usada após o processamento)
     const clearUploadedFilesTemp = useCallback(() => {
         setUploadedFilesTemp([]);
     }, []);
-
-    // Função para adicionar arquivos (limpa o estado anterior de resultado)
+    
+    // Função para adicionar arquivos a fila
     const addFile = useCallback((file: File) => {
         // Zera o resultado anterior quando um novo lote começa a ser upado
-        setProcessedResults([]);
-        setUploadedFilesTemp([file]);
-    }, []);
+        if (uploadedFilesTemp.length === 0) {
+            setProcessedResults([]);
+        }
+        setUploadedFilesTemp(prev => [...prev, file]);
+    }, [uploadedFilesTemp]);
 
     const resetBatch = useCallback(() => {
         setProcessedResults([]);
         setUploadedFilesTemp([]);
     }, []);
 
-    // Função para salvar o resultado final do backend - os dados extraídos
-    const setBatchResults = useCallback((results: ExtractBatchResponse) => {
-        setProcessedResults(results); // Salva o resultado final
-    }, []);
-
-    const addNewFileToTemp = useCallback((file: File) => {
-        setUploadedFilesTemp(prev => [...prev, file]);
-    }, []);
+    
+    // const addNewFileToTemp = useCallback((file: File) => {
+    //     setUploadedFilesTemp(prev => [...prev, file]);
+    // }, []);
 
     const contextValue = {
         processedResults,
         setProcessedResults: setBatchResults,
         uploadedFilesTemp,
-        addFile: addNewFileToTemp,
+        addFile,
         clearUploadedFilesTemp,
         resetBatch
     };
 
     return (
-
-        // Passamos a função de salvar lote
         <ExtractionContext.Provider value={contextValue}>
             {children}
         </ExtractionContext.Provider>
@@ -87,7 +82,7 @@ export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) =>
 };    
 
 
-// 4. Cria o hook customizado para usar o contexto facilmente
+// 5. Cria o hook customizado para usar o contexto facilmente
 export const useExtraction = ()  => {
 
     const context = useContext(ExtractionContext);

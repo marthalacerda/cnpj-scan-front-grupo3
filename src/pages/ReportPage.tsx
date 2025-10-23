@@ -3,11 +3,11 @@ import { VStack, Flex, Heading, Box, Text, Center, Spinner } from "@chakra-ui/re
 import { useEffect, useState, useMemo, FC } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 
-import Home from "../components/ui/casa";
-import DynamicTable from "../components/ui/tablefinal";
-import Header from '../components/ui/header';
-import Footer from '../components/ui/footer';
-import DownloadCSV from "../components/ui/download";
+import Home from "../components/ui/Home";
+import DynamicTable from "../components/ui/DynamicTable";
+import Header from '../components/ui/Header';
+import Footer from '../components/ui/Footer';
+import DownloadCSV from "../components/ui/DownloadCSV";
 
 import { useExtraction } from "@/context/ExtractionContext";
 import { getCsvReport } from "@/api/reports";

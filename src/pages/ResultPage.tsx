@@ -10,8 +10,8 @@ import {
 import { Table, Tbody, Thead, Tr, Th, Td } from '@chakra-ui/table';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/ui/header'; 
-import Footer from '../components/ui/footer';
+import Header from '../components/ui/Header'; 
+import Footer from '../components/ui/Footer';
 import { useExtraction } from '@/context/ExtractionContext';
 import { downloadCsvReport, getCsvReport } from '@/api/reports'; // NOVO: Funções de API de relatório
 import { AVAILABLE_FIELDS, FIELD_KEYS } from '@/constants/fields'; // NOVO: Constantes de campos

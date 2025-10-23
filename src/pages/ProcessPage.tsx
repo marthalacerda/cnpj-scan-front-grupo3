@@ -1,10 +1,10 @@
 import { Box, Button, Heading, Flex, Text, VStack } from '@chakra-ui/react';
 import { useState, useMemo, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/ui/header'; 
-import Footer from '../components/ui/footer';
-import SelectBox from '@/components/ui/selectbox';
-import Tabela from '@/components/ui/tabela';
+import Header from '../components/ui/Header'; 
+import Footer from '../components/ui/Footer';
+import SelectBox from '@/components/ui/SelectBox';
+import Tabela from '@/components/ui/Tabela';
 import { useExtraction } from '@/context/ExtractionContext';
 import { FIELD_KEYS, AVAILABLE_FIELDS } from '@/constants/fields';
 

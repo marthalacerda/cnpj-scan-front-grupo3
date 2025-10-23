@@ -41,6 +41,8 @@ interface DataTableProps {
 // Funções auxiliares/utilitárias (mover para arquivo "util.ts" ??? )
 // ---------------------------------------------------------------------
 
+const CSV_DELIMITER = ';';
+
 // Converte a string CSV para uma lista de objetos [{..}, {..}, ..]
 const parseCSV = (csv: string): Record<string, any>[] => {
   if (!csv) return [];
@@ -51,10 +53,10 @@ const parseCSV = (csv: string): Record<string, any>[] => {
   if (rows.length === 0) return [];
 
   // Usa a primeira linha como cabeçalho
-  const headers = rows[0].split(',').map(header => header.trim().replace(/"/g, ''));
+  const headers = rows[0].split(CSV_DELIMITER).map(header => header.trim().replace(/"/g, ''));
 
   const data = rows.slice(1).map(row => {
-    const values = row.split(',').map(v => v.trim().replace(/"/g, ''));
+    const values = row.split(CSV_DELIMITER).map(v => v.trim().replace(/"/g, ''));
     const obj: Record<string, any> = {};
     headers.forEach((header, index) => {
       obj[header] = values[index];

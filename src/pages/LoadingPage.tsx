@@ -18,7 +18,10 @@ const LoadingPage: FC = () => {
     useEffect(() => {
 
         // Safety check: Se, por algum motivo, a lista de arquivos a processar estiver vazia aqui, saia.
-        if (filesToProcessCount === 0) return; 
+        if (filesToProcessCount === 0) {
+            navigate('/');
+            return;
+        }
 
         const runExtraction = async () => {
 
@@ -52,8 +55,8 @@ const LoadingPage: FC = () => {
             }
         };
 
-        // Roda apenas na montagem, desde que tenha arquivos na fila
         runExtraction();
+
     }, [filesToProcessCount, navigate, setProcessedResults, clearUploadedFilesTemp]);
 
     
@@ -64,7 +67,7 @@ const LoadingPage: FC = () => {
             <Heading size="xl">Processando dados dos ({filesToProcessCount}) arquivos...</Heading>
             
             <Text fontSize="lg">
-                Aguarde, extração de dados em andamento.
+                Aguarde, análise/extração em andamento.
             </Text>
         </VStack>
     );
