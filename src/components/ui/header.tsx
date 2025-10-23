@@ -8,7 +8,9 @@ import { CiLight } from "react-icons/ci";
 import logoImage from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 
-
+interface HeaderProps {
+  title: string;
+}
 
 const Header: FC<HeaderProps> = ({ title }) => {
   const { colorMode, toggleColorMode } = useColorMode();
