@@ -1,5 +1,5 @@
-import { Box, Button, Heading, Flex, Text, VStack } from '@chakra-ui/react';
-import { useState, useMemo, FC } from 'react';
+import { Box, Button, Heading, Flex, Text, VStack, Spinner } from '@chakra-ui/react';
+import { useState, useMemo, FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/ui/Header'; 
 import Footer from '../components/ui/Footer';
@@ -7,12 +7,13 @@ import SelectBox from '@/components/ui/SelectBox';
 import Tabela from '@/components/ui/Tabela';
 import { useExtraction } from '@/context/ExtractionContext';
 import { FIELD_KEYS, AVAILABLE_FIELDS } from '@/constants/fields';
+import Home from '@/components/ui/Home';
 
 
 const ProcessPage: FC = () => {
 
     // Pega diretamente o array de resultados da extração
-    const { processedResults } = useExtraction();
+    const { processedResults, isBatchComplete  } = useExtraction();
     const navigate = useNavigate();
 
     // Estado local para armazenar os campos selecionados
@@ -26,15 +27,25 @@ const ProcessPage: FC = () => {
 
     // O total é o número de resultados que recebemos
     const totalProcessedCount = processedResults.length;
+
+
+    //----------------
     
     // Safety check
-    if (totalProcessedCount === 0) {
+    useEffect(() => {
+        if (totalProcessedCount === 0 && isBatchComplete) {            
+            console.log('DEBUG - Redirecionando para Home: Processo finalizado sem dados');
+            navigate('/');
+        }
+    }, [totalProcessedCount, navigate]);
 
-        // Se a navegação pra cá falhou, não tem resultado, volta pra home
-        navigate('/');
+    if (totalProcessedCount === 0) {
         return null;
     }
 
+    //-----------------
+
+   
     // Criação da função de atualização que será passada para o SelectBox
     const handleFieldsUpdate = (fields: string[]) => {
         setSelectedFields(fields);
@@ -56,22 +67,20 @@ const ProcessPage: FC = () => {
         navigate('/relatorio', { state: { selectedFields: fieldsToSend } });
     };
 
-    // Verifica se a tabela está vazia
-    // const isTableEmpty = tableStatusData.length === 0;
     
     return (
         <VStack w="100%" h="100%" align="center" justify="start" gap="10px">
 
             <Header title="CNPJ Scan" />
 
-            <Box flexGrow={1} p={8} w="100%" textAlign="center">
+            <Box flexGrow={1} p={4} w="100%" textAlign="center">
                 
-                <Heading size="3xl" mb={8}>
+                <Heading size="2xl" mb={8}>
                     Processamento Concluído
                 </Heading>
 
                 {/* INJEÇÃO 1: Tabela de status */}
-                <Flex align="center" justify="center" mb={8}>
+                <Flex align="center" justify="center" mb={4}>
                     <Tabela data={tableStatusData} />
                 </Flex>
 
@@ -98,11 +107,20 @@ const ProcessPage: FC = () => {
                     )}
                     
                 </Flex>
+                
+                <Flex align="top-center" justify="center" gap={7} mt={8}>
+
+                <Home navigateTo='/'/>
 
                 {/* Botão para o Próximo Passo */}
                 <Button
-                    mt={10}
+                    // mt={10}
+                    bg= "white"
+                    color= "#036DC5"
+                    _hover={{ bg: "#bed8f1ff" }}
                     size="lg"
+                    rounded="md"
+                    boxShadow="md"
                     onClick={handleNextStep}
                     disabled={validFilesForReport.length === 0}
                     // isDisabled={validFilesForReport.length === 0}
@@ -110,6 +128,9 @@ const ProcessPage: FC = () => {
                 >
                     Gerar Tabela CSV
                 </Button>
+                
+                </Flex>
+
                 
             </Box>
 

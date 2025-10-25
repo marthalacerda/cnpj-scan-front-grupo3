@@ -15,6 +15,7 @@ interface ExtractionContextType {
     clearUploadedFilesTemp: () => void;
     resetBatch: () => void;
     removeFile: (indexToRemove: number) => void;
+    isBatchComplete: boolean;
 }
 
 
@@ -37,9 +38,13 @@ export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) =>
     // Armazena os objetos File antes de ir pra API
     const [uploadedFilesTemp, setUploadedFilesTemp] = useState<File[]>([]);
 
+    // Indica se o processamento terminou
+    const [isBatchComplete, setIsBatchComplete] = useState(false);
+
     // Função para salvar o resultado final do backend - os dados extraídos
     const setBatchResults = useCallback((results: ExtractBatchResponse) => {
         setProcessedResults(results);
+        setIsBatchComplete(true);
     }, []);
 
     // Função para limpar a fila (usada após o processamento)
@@ -59,6 +64,7 @@ export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) =>
     const resetBatch = useCallback(() => {
         setProcessedResults([]);
         setUploadedFilesTemp([]);
+        setIsBatchComplete(false);
     }, []);
 
     // Função para remover arquivo pelo índice
@@ -76,7 +82,8 @@ export const ExtractionProvider: FC<ExtractionProviderProps> = ({ children }) =>
         addFile,
         clearUploadedFilesTemp,
         resetBatch,
-        removeFile
+        removeFile,
+        isBatchComplete
     };
 
     return (

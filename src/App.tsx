@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/arquivos" element={<FileListPage/>} />
-        <Route path="/status/todos" element={<LoadingPage/>} /> 
+        <Route path="/extracao" element={<LoadingPage/>} /> 
         {/* <Route path="/resultado" element={<ResultPage/>} /> */}
         <Route path="/resultado" element={<ProcessPage/>} />
         <Route path="/relatorio" element={<ReportPage/>} />

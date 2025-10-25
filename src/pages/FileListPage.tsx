@@ -1,11 +1,12 @@
 import { Box, Button, Heading, VStack, Flex, IconButton, Text } from '@chakra-ui/react';
-import { FC, useMemo, useRef } from 'react';
+import { FC, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/ui/Header'; 
 import Footer from '@/components/ui/Footer';
 import Tabela from '@/components/ui/Tabela';
 import { useExtraction } from '@/context/ExtractionContext';
 import { IoCloseCircleOutline } from 'react-icons/io5';
+import Txtespec from '@/components/ui/TextDescriptions';
 
 const FileListPage: FC = () => {
 
@@ -26,6 +27,17 @@ const FileListPage: FC = () => {
         }));
     }, [uploadedFilesTemp]);
 
+    const isEmpty = fileListData.length === 0;
+
+    // // Safety check
+    // useEffect(() => {
+
+    //     if (isEmpty) {
+    //         navigate('/');
+    //     }
+        
+    // }, [isEmpty, navigate]);
+
     // Lógica para abrir o input de arquivo (borão de add + arquivos)
     const handleAddMoreClick = () => {
         fileInputRef.current?.click();
@@ -43,25 +55,17 @@ const FileListPage: FC = () => {
 
     // Ação do Botão: Navega para a LoadingPage
     const handleExtractAll = () => {
-        navigate(`/status/todos`);
+        navigate(`/extracao`);
     };
 
     const handleRemoveFile = (indexToRemove: number) => {
         removeFile(indexToRemove);
     };
 
-    // // Safety check
-    // if (fileListData.length === 0) {
-    //     navigate('/');
-    //     return null;
-    // }
-
-    const isEmpty = fileListData.length === 0;
-    
-
     return (
-        <VStack w="100%" h="100%" align="center" justify="start" gap="10px"> 
+        <VStack w="100%" minH="100vh" align="stretch"> 
             <Header title="CNPJ Scan" />
+
 
             {/* Input de arquivo */}
             <input
@@ -74,22 +78,32 @@ const FileListPage: FC = () => {
             />
 
 
-            <Box flexGrow={1} p={8} w="100%" textAlign="center">
-                <Heading size="2xl" mb={6}>
-                    {isEmpty ? "..." : `${fileListData.length} arquivo(s) carregado(s)` }
-                    {/* {uploadedFilesTemp.length} arquivo(s) carregado(s): */}
+            <Box flexGrow={1} paddingY={4} paddingX={8} w="100%" 
+                textAlign="center"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="flex-start" // Alinha o conteúdo ao topo
+                overflowY="auto" // Scroll vertical aqui
+            >
+                {/* <Heading size="xl" mb={6}> */}
+                    {/* {isEmpty ? 'Nenhum arquivo carregado' : `${fileListData.length} arquivo(s)` } */}
+                {/* </Heading> */}
+                <Heading size="xl" mb={6}>
+                    {`${fileListData.length} arquivo(s)` }
                 </Heading>
 
                 {/* Renderização condicional */}
                 {isEmpty ? (
                     <VStack minH="300px" justify="center">
-                        <Text fontSize="xl" color="whiteAlpha.800">
-                            Nenhum arquivo carregado ainda.
-                        </Text>
                         {/* Botão principal para iniciar o upload */}
                         <Button 
-                            size="lg" 
-                            colorScheme="blue" 
+                            bg= "white"
+                            color= "#036DC5"
+                            _hover={{ bg: "#bed8f1ff" }}
+                            size="lg"
+                            rounded="md"
+                            boxShadow="md"
                             onClick={handleAddMoreClick}
                         >
                             Carregar Arquivos PDF
@@ -106,21 +120,23 @@ const FileListPage: FC = () => {
                             mx="auto" 
                             maxW="800px" 
                             w="full"
-                            maxHeight="400px" // ALTURA MÁXIMA PARA CONTROLAR O SCROLL
+                            maxHeight="300px" // ALTURA MÁXIMA PARA CONTROLAR O SCROLL
                             overflowY="auto"  // ATIVA O SCROLL VERTICAL
                             p={2} 
                             borderRadius="md" 
                             bg="rgba(255, 255, 255, 0.1)"    
                         >
                                                         
-                            <VStack align="start" w="full" > {/* Removidos p e bg repetidos */}
+                            <VStack align="start" w="full"> {/* Removidos p e bg repetidos */}
                                 
                                 {uploadedFilesTemp.map((file, index) => (
                                     <Flex key={index} justify="space-between" align="center" w="full" p={1} bg="rgba(0,0,0,0.1)" borderRadius="sm">
-                                        <Text color="white" 
+                                        <Text
+                                            fontSize={14} 
+                                            color="white" 
                                             textAlign="justify"
                                             flexGrow={1}
-                                            paddingLeft={5}>
+                                            paddingLeft={3}>
                                             {file.name}
                                         </Text>
                                         <IconButton
@@ -140,22 +156,38 @@ const FileListPage: FC = () => {
 
                         {/* BOTÕES DE AÇÃO: EXTRAIR ou ADICIONAR MAIS */}
                         <Flex gap={4} justify="center">
-                            <Button
+                            {/* Botão para adicionar mais, sem navegar */}
+                            <Button 
+                                bg= "white"
+                                color= "#036DC5"
+                                _hover={{ bg: "#bed8f1ff" }}
                                 size="lg"
-                                colorScheme="green"
+                                rounded="md"
+                                boxShadow="md"
+                                onClick={handleAddMoreClick}
+                            >
+                                + Adicionar mais arquivos
+                            </Button>
+
+                            <Button
+                                bg= "white"
+                                color= "#036DC5"
+                                _hover={{ bg: "#bed8f1ff" }}
+                                size="lg"
+                                rounded="md"
+                                boxShadow="md"
                                 onClick={handleExtractAll}
                             >
-                                Analisar {fileListData.length} Arquivo(s)
+                                Avançar &rarr;
                             </Button>
                             
-                            {/* Botão para adicionar mais, sem navegar */}
-                            <Button size="lg" variant="outline" colorScheme="blue" onClick={handleAddMoreClick}>
-                                + Adicionar Mais
-                            </Button>
                         </Flex>
                     </>
                 )}
+                
+                {/* <Txtespec/> */}
             </Box>
+
 
             <Footer title="CNPJ Scan" copyrightText="Grupo 3 NEXT" />
         </VStack>

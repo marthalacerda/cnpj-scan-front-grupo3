@@ -74,7 +74,7 @@ const DynamicTable: FC<DataTableProps> = ({
   csvContent,
   selectedFields,
   // filters = {},
-  title = 'Dados Extraídos',
+  title = 'CSV gerado com sucesso!',
   // showDownloadButton = true,
   minHeight = '400px',
 }: DataTableProps) => {
@@ -135,14 +135,14 @@ const DynamicTable: FC<DataTableProps> = ({
           <Text color="red.600" fontWeight="semibold" textAlign="center">
             {csvContent!.replace("ERRO", "")}
           </Text>
-          <Button 
+          {/* <Button 
             colorScheme="red" 
             variant="outline" 
             //onClick={loadData} 
             size="sm"
           >
             Tentar Novamente
-          </Button>
+          </Button> */}
         </Flex>
       </Box>
     );
@@ -165,14 +165,14 @@ const DynamicTable: FC<DataTableProps> = ({
           <Text color="gray.600" fontWeight="semibold">
             Nenhum dado disponível
           </Text>
-          <Button
+          {/* <Button
             colorScheme="blue" 
             variant="ghost" 
             // onClick={loadData} 
             size="sm"
           >
             Recarregar
-          </Button>
+          </Button> */}
         </Flex>
       </Box>
     );
@@ -209,14 +209,14 @@ const DynamicTable: FC<DataTableProps> = ({
         </Flex>
 
         <Flex gap={2}>
-          <Button
+          {/* <Button
             size="sm"
             colorScheme="blue"
             variant="outline"
             // onClick={loadData}
           >        
             Recarregar
-          </Button>
+          </Button> */}
         </Flex>
       </Flex>
 

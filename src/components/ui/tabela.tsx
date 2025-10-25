@@ -21,7 +21,7 @@ interface TabelaProps {
 }
 
 
-const MAX_TABLE_HEIGHT = "600px";
+const MAX_TABLE_HEIGHT = "400px";
 const MIN_TABLE_HEIGHT = "100px";
 const ROW_HEIGHT_ESTIMATE = 50;
 
@@ -56,10 +56,10 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
       borderColor="white"
       rounded="md"
       height={calculatedHeight}
-      width="600px"
+      width="800px"
     >
       <Table.Root size="md" stickyHeader>
-        <Table.Header fontSize="120%">
+        <Table.Header fontSize="100%">
           <Table.Row bg="gray.300">
             {/* ⚠️ LÓGICA DE CABEÇALHO CONDICIONAL */}
             {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width="20%">Nº</Table.ColumnHeader>)}
@@ -68,7 +68,7 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
           </Table.Row>
         </Table.Header>
 
-        <Table.Body color="white">
+        <Table.Body color="white" fontSize={12}>
           {data.map((item) => (
             <Table.Row key={item.id} bg="white" borderColor="white">
               

@@ -4,6 +4,7 @@ import {
   Portal,
   Wrap,
   createListCollection,
+  Text
 } from "@chakra-ui/react"
 import { useMemo, useState, FC } from "react"
 
@@ -72,6 +73,8 @@ const SelectBox: FC<SelectBoxProps> = ({ availableFields: avaiableFields, select
     onFieldsChange(details.value)
   }
 
+  const isSelectionEmpty = selectedFields.length === 0;
+
   return (
     <Combobox.Root
       multiple
@@ -90,10 +93,11 @@ const SelectBox: FC<SelectBoxProps> = ({ availableFields: avaiableFields, select
         ))}
       </Wrap>
 
-      <Combobox.Label>Selecione os dados que deseja converter :</Combobox.Label>
+      <Combobox.Label>Selecione os campos para montar sua tabela :</Combobox.Label>
 
       <Combobox.Control>
-        <Combobox.Input />
+        <Combobox.Input
+          placeholder={isSelectionEmpty? "Todos (padrão)" : "Adicionar campos.."}/>
         <Combobox.IndicatorGroup>
           <Combobox.Trigger />
         </Combobox.IndicatorGroup>
@@ -103,14 +107,14 @@ const SelectBox: FC<SelectBoxProps> = ({ availableFields: avaiableFields, select
         <Combobox.Positioner>
           <Combobox.Content color='black'>
             <Combobox.ItemGroup>
-              <Combobox.ItemGroupLabel>Campos</Combobox.ItemGroupLabel>
+              <Combobox.ItemGroupLabel></Combobox.ItemGroupLabel>
               {filteredItems.map((item) => (
                 <Combobox.Item key={item} item={item}>
                   {fieldMapping[item]}
                   <Combobox.ItemIndicator />
                 </Combobox.Item>
               ))}
-              <Combobox.Empty>Não Encontrado</Combobox.Empty>
+              <Combobox.Empty>Todos</Combobox.Empty>
             </Combobox.ItemGroup>
           </Combobox.Content>
         </Combobox.Positioner>

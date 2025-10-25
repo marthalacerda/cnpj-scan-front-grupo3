@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, Text, Container, Heading } from '@chakra-ui/react';
-import React from 'react';
+import { FC } from 'react';
 
 // --- Dados dos textos descritivos ---
 const textData = [
@@ -13,16 +13,16 @@ const textData = [
   },
 ];
 
-const Txtespec: React.FC = () => {
+const Txtespec: FC = () => {
   return (
-    <Container maxW="6xl" py={10}>
+    <Container maxW="6xl" py={{base:6, md:8}} mt={10}>
       <Grid
         templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
-        gap={{ base: 8, md: 6 }}
+        gap={{ base: 6, md: 4 }}
         textAlign={'center'}
       >
         {textData.map((item, index) => (
-          <GridItem key={index} p={6} borderLeft={{ md: index === 1 ? '1px solid' : 'none' }} borderColor="white">
+          <GridItem key={index} p={4} borderLeft={{ md: index === 1 ? '1px solid' : 'none' }} borderColor="white">
             <Heading as="h3" size="2xl" mb={2} color="white">
               {item.title}
             </Heading>

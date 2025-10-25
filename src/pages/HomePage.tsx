@@ -25,17 +25,6 @@ const HomePage: FC = () => {
     }, [resetBatch]);
 
 
-    // // Redirecionamento
-    // const navigateToQueue = uploadedFilesTemp.length > 0;
-        
-
-    // // Redireciona se a fila não estiver vazia
-    // useEffect(() => {
-    //     if (navigateToQueue) {
-    //         navigate('/arquivos');
-    //     }
-    // }, [navigateToQueue, navigate]);
-
     // 📁 Quando o arquivo é selecionado
     const handleFileSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsLoading(true); // inicia o loading
@@ -76,63 +65,69 @@ const HomePage: FC = () => {
   
     return (
 // 1. Contêiner Principal: Deve ser um Flexbox (VStack/Flex) com altura total.
-<VStack w="100%" h="100%" align="center" justify="center" gap="10px">  
- {/* Header */}
-<Header title="CNPJ Scan" />
+// {/* <VStack w="100%" h="100%" align="center" justify="center" gap="10px">   */}
 
-{/* 2. Conteúdo Principal: Deve ter flexGrow={1} para ocupar o espaço restante. */}
-<Box 
- flexGrow={8} 
- p={8} 
- w="100%"
-textAlign="center" 
- >
- <Heading size="3xl" mb={1}>
- Converta PDF para EXCEL.
-</Heading>
+        <VStack w="100%" minHeight="100vh" align="strech">
+            {/* Header */}
+            <Header title="CNPJ Scan" />
+
+            {/* 2. Conteúdo Principal: Deve ter flexGrow={1} para ocupar o espaço restante. */}
+            <Box 
+                flexGrow={1} 
+                p={8} 
+                w="100%"
+                textAlign="center"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <Heading size="3xl" mb={1}>
+                    Converta PDF para EXCEL.
+                </Heading>
         
-        {/* INSERÇÃO DO TEXTO "Powered by CESAR School" */}
-        <Box 
-            fontSize="lg" 
-            color="white" 
-            mb={8} // Adiciona margem abaixo para separar do próximo elemento (Flex/MeuBotao)
+                {/* INSERÇÃO DO TEXTO "Powered by CESAR School" */}
+                <Box 
+                    fontSize="lg" 
+                    color="white" 
+                    mb={8} // Adiciona margem abaixo para separar do próximo elemento (Flex/MeuBotao)
+                >
+                    Powered by CESAR School
+                </Box>
+
+                <Flex align='center' justify='center' mb={12}>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileSelection}
+                        style={{ display: 'none' }}
+                        accept=".pdf"
+                        multiple
+                    />
+
+                    {/* 🟢 Botão de seleção de arquivo */}
+                    <Button
+                        colorPalette="gray"
+                        size="lg"
+                        onClick={handleButtonClick}
+                        loading={isLoading}
+                        loadingText="Carregando arquivos..."
+                        variant="surface"
+                    >
+                        Selecionar Arquivos PDF
+                    </Button>
+                </Flex>
             
-        >
-            Powered by CESAR School
-        </Box>
+                <Txtespec/>
+            </Box>
 
-<Flex align='center' justify='center'>
-	<input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileSelection}
-            style={{ display: 'none' }}
-            accept=".pdf"
-            multiple
-          />
-
-          {/* 🟢 Botão de seleção de arquivo */}
-          <Button
-            colorPalette="gray"
-            size="lg"
-            onClick={handleButtonClick}
-            loading={isLoading}
-            loadingText="Carregando arquivos..."
-            variant="surface"
-          >
-            Selecionar Arquivos PDF
-          </Button>
- </Flex>
- <Txtespec/>
-</Box>
-
- {/* 3. Footer: Deve ser o ÚLTIMO elemento e tem o 'mt="auto"' interno. */}
-<Footer 
- title="CNPJ Scan" 
- copyrightText="Grupo 3 NEXT"
-/>
- </VStack>
- )
+            {/* 3. Footer: Deve ser o ÚLTIMO elemento e tem o 'mt="auto"' interno. */}
+            <Footer 
+               title="CNPJ Scan" 
+                copyrightText="Grupo 3 NEXT"
+            />
+        </VStack>
+    )
 }
 
 export default HomePage;

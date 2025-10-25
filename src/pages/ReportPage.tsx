@@ -1,4 +1,4 @@
-import { VStack, Flex, Heading, Box, Text, Center, Spinner } from "@chakra-ui/react";
+import { VStack, Flex, Heading, Box, Text, Center, Spinner, Button } from "@chakra-ui/react";
 
 import { useEffect, useState, useMemo, FC } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
@@ -115,8 +115,23 @@ const ReportPage: FC = () => {
             </Center>
 
             {/* ⚠️ INJEÇÃO 2: Passamos o conteúdo CSV (texto) e status para o botão de download */}
-            <Flex align="top-center" justify="center" gap={7} mt={2}>
+            <Flex align="top-center" justify="center" gap={7} mt={8}>
+
+                <Button
+                    bg= "white"
+                    color= "#036DC5"
+                    _hover={{ bg: "#bed8f1ff" }}
+                    size="lg"
+                    rounded="md"
+                    boxShadow="md"
+                    onClick={() => navigate('/resultado')}
+                >
+                    &larr; Voltar
+
+                </Button>
+
                 <Home navigateTo="/"/>
+
                 <DownloadCSV
                     csvContent={csvContent}
                     isDisabled={!csvContent || csvContent.startsWith("ERRO")}
