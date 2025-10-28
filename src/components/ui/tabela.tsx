@@ -21,8 +21,8 @@ interface TabelaProps {
 }
 
 
-const MAX_TABLE_HEIGHT = 400;
-const MIN_TABLE_HEIGHT = 100;
+const MAX_TABLE_HEIGHT = "300px";
+const MIN_TABLE_HEIGHT = "100px";
 const ROW_HEIGHT_ESTIMATE = 40;
 
 
@@ -36,13 +36,13 @@ const Tabela: FC<TabelaProps> = ({ data }) => {
   
   const calculatedHeight = useMemo(() => {
     // cabeçalho + altura de todas as linhas
-    const contentHeight = (1 + data.length) * ROW_HEIGHT_ESTIMATE;
+    const contentHeight = 50 + ( data.length * ROW_HEIGHT_ESTIMATE);
 
     // Se a altura calculada for menor que o MÁXIMO, usamos a altura calculada
         // Caso contrário, usamos a altura MÁXIMA para forçar a rolagem.
-        if (contentHeight <= MAX_TABLE_HEIGHT) {
+        if (contentHeight <= parseFloat(MAX_TABLE_HEIGHT)) {
             // Se a altura calculada for muito pequena, garantimos a altura mínima
-            return `${Math.max(contentHeight, MIN_TABLE_HEIGHT)}px`;
+            return `${Math.max(contentHeight, parseFloat(MIN_TABLE_HEIGHT))}px`;
         }
         
         // Se exceder o limite, retorna a altura máxima
@@ -55,7 +55,8 @@ const Tabela: FC<TabelaProps> = ({ data }) => {
       borderWidth="0.5px"
       borderColor="gray.200"
       rounded="md"
-      height={calculatedHeight}
+      // height={calculatedHeight}
+      height={data.length < 6 ? "auto" : MAX_TABLE_HEIGHT}
       width="800px"
     >
       <Table.Root size="md" stickyHeader>
