@@ -131,11 +131,15 @@ const FileListPage: FC = () => {
                                 {uploadedFilesTemp.map((file, index) => (
                                     <Flex key={index} justify="space-between" align="center" w="full" p={1} bg="rgba(119, 119, 119, 0.03)" borderRadius="sm">
                                         <Text
+                                            maxW="85%"
                                             fontSize={14} 
                                             color="#036DC5" 
-                                            textAlign="justify"
+                                            textAlign="left"
                                             flexGrow={1}
-                                            paddingLeft={3}>
+                                            paddingLeft={3}
+                                            whiteSpace="nowrap"
+                                            truncate
+                                        >
                                             {file.name}
                                         </Text>
                                         <IconButton
