@@ -193,11 +193,10 @@ const DynamicTable: FC<DataTableProps> = ({
         justify="space-between"
         align="center"
         flexWrap="wrap"
-        gap={4}
       >
-        <Flex align="center" gap={3}>
+        <Flex align="center" gap="5px">
           <Box>
-            <Text fontWeight="bold" color="gray.700" fontSize="lg">
+            <Text fontWeight="bold" color= "#036DC5" fontSize="lg">
               {title}
             </Text>
             {lastUpdate && (
@@ -207,59 +206,59 @@ const DynamicTable: FC<DataTableProps> = ({
             )}
           </Box>
         </Flex>
-
-        <Flex gap={2}>
-          {/* <Button
-            size="sm"
-            colorScheme="blue"
-            variant="outline"
-            // onClick={loadData}
-          >        
-            Recarregar
-          </Button> */}
+        <Flex gap="2px">
         </Flex>
       </Flex>
 
       {/* Tabela */}
-      <Box
-        bg="white"
-        borderRadius="lg"
-        overflow="hidden"
-        border="1px"
-        borderColor="gray.200"
-      >
-        <Box overflowX="auto"> {/* maxH="500px" adicionar maxH p rolagem vertical?*/}
-          <Table.Root size="sm" variant="line">
-            <Table.Header>
-              <Table.Row bg="blue.50">
-                {columns.map((column) => (
-                  <Table.ColumnHeader
-                    key={column}
-                    color="blue.700"
-                    fontWeight="bold"
-                    textTransform="capitalize"
-                  >
-                    {column.replaceAll('_', ' ')}
-                  </Table.ColumnHeader>
-                ))}
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {tableData.map((row, i) => (
-                <Table.Row
-                  key={i}
-                  _hover={{ bg: 'blue.50' }}
-                >
-                  {columns.map((col) => (
-                    <Table.Cell key={col} color="gray.700"> {/* color="gray.700"*/}
-                      {String(row[col] ?? '')}
-                    </Table.Cell>
+        <Box
+          bg="white"
+          borderRadius="lg"
+          overflow="hidden"
+          border="0.5px"
+          borderColor="gray.200"
+        >
+          <Box overflowX="auto" maxH="500px" maxW="100%">
+            <Table.Root size="sm" variant="line" tableLayout="fixed">
+              <Table.Header minW="50px">
+                <Table.Row bg="blue.50">
+                  {columns.map((column) => (
+                    <Table.ColumnHeader
+                      key={column}
+                      color="blue.700"
+                      fontWeight="bold"
+                      fontSize="sm"
+                      textTransform="capitalize"
+                      maxW="50px">
+                      {column.replaceAll('_', ' ')}
+                    </Table.ColumnHeader>
                   ))}
                 </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
+              </Table.Header>
+
+              <Table.Body>
+                {tableData.map((row, i) => (
+                  <Table.Row
+                    key={i}
+                    _hover={{ bg: 'blue.50' }}
+                  >
+                    {columns.map((col) => (
+                      <Table.Cell
+                        key={col}
+                        color="gray.700"
+                        maxW="60px"
+                        whiteSpace="nowrap" 
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                      >
+                        {String(row[col] ?? '')}
+                      </Table.Cell>
+                    ))}
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
+          </Box>
         </Box>
 
         {/* Footer com contador */}
@@ -277,7 +276,6 @@ const DynamicTable: FC<DataTableProps> = ({
             {columns.length} colunas
           </Text>
         </Flex>
-      </Box>
     </Box>
   );
 }

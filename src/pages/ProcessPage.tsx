@@ -3,7 +3,7 @@ import { useState, useMemo, FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/ui/Header'; 
 import Footer from '../components/ui/Footer';
-import SelectBox from '@/components/ui/SelectBox';
+import SelectBox from '../components/ui/selectbox';
 import Tabela from '@/components/ui/Tabela';
 import { useExtraction } from '@/context/ExtractionContext';
 import { FIELD_KEYS, AVAILABLE_FIELDS } from '@/constants/fields';
@@ -85,7 +85,7 @@ const ProcessPage: FC = () => {
                 </Flex>
 
                 {/* Informação sobre quantos arquivos foram válidos */}
-                <Text fontSize="lg" mb={8} color={validFilesForReport.length > 0 ? 'green.300' : 'red.300'}>
+                <Text fontSize="lg" mb={8} color={validFilesForReport.length > 0 ? 'gray.800' : 'red.300'}>
                     {validFilesForReport.length} de {totalProcessedCount} arquivos prontos para o relatório CSV.
                 </Text>
                 

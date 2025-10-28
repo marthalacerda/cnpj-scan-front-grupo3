@@ -26,23 +26,6 @@ interface SelectBoxProps {
 }
 
 
-// Essa lista vai vir das props
-// const campos = [
-//   "Nome",
-//   "CNPJ",
-//   "CEP",
-//   "Logradouro",
-//   "Numero",
-//   "Complemento",
-//   "Bairro",
-//   "Municipio",
-//   "UF",
-//   "Telefone",
-//   "Situação",
-// ]
-
-
-
 const SelectBox: FC<SelectBoxProps> = ({ availableFields: avaiableFields, selectedFields, onFieldsChange, fieldMapping }) => {
 
   const [searchValue, setSearchValue] = useState("")
@@ -87,8 +70,6 @@ const SelectBox: FC<SelectBoxProps> = ({ availableFields: avaiableFields, select
     >
       <Wrap gap="2">
         {selectedFields.map((fieldKey) => (
-
-          // Exibe o nome amigável nas tags
           <Badge key={fieldKey}>{fieldMapping[fieldKey]}</Badge>
         ))}
       </Wrap>
@@ -105,7 +86,7 @@ const SelectBox: FC<SelectBoxProps> = ({ availableFields: avaiableFields, select
 
       <Portal>
         <Combobox.Positioner>
-          <Combobox.Content color='black'>
+          <Combobox.Content color='#036DC5'>
             <Combobox.ItemGroup>
               <Combobox.ItemGroupLabel></Combobox.ItemGroupLabel>
               {filteredItems.map((item) => (

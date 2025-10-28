@@ -3,7 +3,6 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/ui/Header'; 
 import Footer from '@/components/ui/Footer';
-import Tabela from '@/components/ui/Tabela';
 import { useExtraction } from '@/context/ExtractionContext';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Txtespec from '@/components/ui/TextDescriptions';
@@ -124,7 +123,7 @@ const FileListPage: FC = () => {
                             overflowY="auto"  // ATIVA O SCROLL VERTICAL
                             p={2} 
                             borderRadius="md" 
-                            bg="rgba(255, 255, 255, 0.1)"    
+                            bg="white"    
                         >
                                                         
                             <VStack align="start" w="full"> {/* Removidos p e bg repetidos */}
@@ -133,7 +132,7 @@ const FileListPage: FC = () => {
                                     <Flex key={index} justify="space-between" align="center" w="full" p={1} bg="rgba(0,0,0,0.1)" borderRadius="sm">
                                         <Text
                                             fontSize={14} 
-                                            color="white" 
+                                            color="#036DC5" 
                                             textAlign="justify"
                                             flexGrow={1}
                                             paddingLeft={3}>
@@ -152,8 +151,9 @@ const FileListPage: FC = () => {
                                     </Flex>
                                 ))}
                             </VStack>
+                            
                         </Box>
-
+                        
                         {/* BOTÕES DE AÇÃO: EXTRAIR ou ADICIONAR MAIS */}
                         <Flex gap={4} justify="center">
                             {/* Botão para adicionar mais, sem navegar */}
@@ -185,7 +185,7 @@ const FileListPage: FC = () => {
                     </>
                 )}
                 
-                {/* <Txtespec/> */}
+                <Txtespec/>
             </Box>
 
 

@@ -102,7 +102,7 @@ const ReportPage: FC = () => {
             Powered by Cesar School
             </Text>
 
-            <Text mb="40px" fontSize="md" color="white">
+            <Text fontSize="md" color="white">
                 {validDataCount} de {totalFilesCount} arquivos na tabela a seguir.
             </Text>
 
