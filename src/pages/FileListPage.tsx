@@ -2,7 +2,7 @@ import { Box, Button, Heading, VStack, Flex, IconButton, Text } from '@chakra-ui
 import { FC, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/ui/header'; 
-import Footer from '@/components/ui/footer';
+import Footer from '@/components/ui/Footer';
 import { useExtraction } from '@/context/ExtractionContext';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Txtespec from '@/components/ui/TextDescriptions';

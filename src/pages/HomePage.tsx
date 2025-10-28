@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Heading, VStack, Text } from '@chakra-ui/react';
 import { useRef, useState, FC, useEffect } from 'react';
 import Header from '@/components/ui/header';
-import Footer from '@/components/ui/footer';
+import Footer from '@/components/ui/Footer';
 import Txtespec from '@/components/ui/TextDescriptions';
 import { useNavigate } from 'react-router-dom';
 import { useExtraction } from '@/context/ExtractionContext';

@@ -57,8 +57,7 @@ export interface BatchApiResponse {
 // ----------------------------------------------------
 
 export async function extractBatchDataFromPDFs(files: File[]): Promise<BatchApiResponse> {
-    console.log(`Tentando EXTRAIR POST para ${EXTRACT_DATA_ENDPOINT} com ${files.length} arquivos.`);
-
+    // console.log(`Tentando EXTRAIR dados de ${files.length} arquivos via POST para: ${EXTRACT_DATA_ENDPOINT}`);
     const formData = new FormData();
 
     // Adicionar todos os arquivos no FormData

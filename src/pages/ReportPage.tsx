@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Home from "../components/ui/Home";
 import DynamicTable from "../components/ui/DynamicTable";
 import Header from '../components/ui/header';
-import Footer from '../components/ui/footer';
+import Footer from '../components/ui/Footer';
 import DownloadCSV from "../components/ui/DownloadCSV";
 
 import { useExtraction } from "@/context/ExtractionContext";
@@ -57,6 +57,8 @@ const ReportPage: FC = () => {
 
             // Envia o array processedResults e os campos para o back
             const result = await getCsvReport(processedResults, selectedFields);
+
+            console.log("4. [LOG DE RELATÓRIO] Resposta recebida da API de relatórios:", result);
 
             setIsLoading(false);
 
@@ -136,7 +138,7 @@ const ReportPage: FC = () => {
         </Box>
 
         <Footer 
-            title="Página 3" 
+            title="CNPJ Scan" 
             copyrightText="Grupo 3 NEXT"
             />
         </VStack>

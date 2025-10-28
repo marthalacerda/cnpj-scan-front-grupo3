@@ -190,7 +190,7 @@ const DynamicTable: FC<DataTableProps> = ({
               {title}
             </Text>
             {lastUpdate && (
-              <Text fontSize="xs" color="gray.500">
+              <Text fontSize="xs" color="gray.100">
                 Atualizado às {lastUpdate.toLocaleTimeString('pt-BR')}
               </Text>
             )}

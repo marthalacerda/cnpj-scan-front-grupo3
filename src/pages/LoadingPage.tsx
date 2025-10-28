@@ -3,7 +3,7 @@ import { useEffect, FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Pega o ID da URL
 import { GlobalResultsState, useExtraction } from '@/context/ExtractionContext';
 import { extractBatchDataFromPDFs } from '@/api/cnpj'; // A função de extração
-import Header from '@/components/ui/Header';
+import Header from '@/components/ui/header';
 import Txtespec from '@/components/ui/TextDescriptions';
 import Footer from '@/components/ui/Footer';
 import { motion } from 'framer-motion'
@@ -28,7 +28,7 @@ const LoadingPage: FC = () => {
 
         // Safety check: Se, por algum motivo, a lista de arquivos a processar estiver vazia aqui, saia.
         if (filesToProcessCount === 0) {
-            navigate('/');
+            // navigate('/');
             return;
         }
 
@@ -45,7 +45,7 @@ const LoadingPage: FC = () => {
             try {
                 // Chamada única para o backend
                 const result = await extractBatchDataFromPDFs(fileObjects);
-                console.log(result.data)
+                console.log("3. [LOG DE RESPOSTA] Resposta recebida da API de extração:", result);
             
                 if (result.success && result.data) {
                 // Salva a lista bruta de resultados
@@ -65,20 +65,20 @@ const LoadingPage: FC = () => {
             } catch (error) {
                 console.error("Erro fatal na extração:", error);
                 // Em caso de erro total, ainda navegamos para mostrar o erro
-                    // const errorResult2 = fileObjects.map(f => ({
-                    //     filename : f.name,
-                    //     status: 'Erro de rede/servidor',
-                    //     error: true
-                    // }));
-                    navigate(`/resultado`);
+                    const errorResult2 = fileObjects.map(f => ({
+                        filename : f.name,
+                        status: 'Erro de rede/servidor',
+                        error: true
+                    }));
+                    // navigate(`/resultado`);
             }
             // console.log(processedResults)   // aqui tá mostrando quantos results tem
-            console.log(processedResults.length) // aqui tá mostrando zero
+            // console.log(processedResults.length) // aqui tá mostrando zero
+            
+            navigate(`/resultado`);
             
             // Limpa a fila TEMP e navega para a Page (Resultado/Status)
             clearUploadedFilesTemp();
-
-            navigate(`/resultado`);
 
         };
 

@@ -2,7 +2,7 @@ import { Box, Button, Heading, Flex, Text, VStack, Spinner } from '@chakra-ui/re
 import { useState, useMemo, FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/ui/header'; 
-import Footer from '../components/ui/footer';
+import Footer from '../components/ui/Footer';
 import SelectBox from '../components/ui/selectbox';
 import Tabela from '@/components/ui/tabela';
 import { useExtraction } from '@/context/ExtractionContext';
@@ -40,6 +40,7 @@ const ProcessPage: FC = () => {
     }, [totalProcessedCount, navigate]);
 
     if (totalProcessedCount === 0) {
+        console.log('DEBUG - Renderização bloqueada: Nenhum arquivo processado disponível.');
         return null;
     }
 

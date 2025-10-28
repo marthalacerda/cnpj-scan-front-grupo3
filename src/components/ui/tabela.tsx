@@ -17,18 +17,18 @@ interface FileListingData {
 // Interface para as Props
 interface TabelaProps {
   data: StatusData[] | FileListingData[];
-  isSimpleList?: boolean;
+  // isSimpleList?: boolean;
 }
 
 
-const MAX_TABLE_HEIGHT = "400px";
-const MIN_TABLE_HEIGHT = "100px";
-const ROW_HEIGHT_ESTIMATE = 50;
+const MAX_TABLE_HEIGHT = 400;
+const MIN_TABLE_HEIGHT = 100;
+const ROW_HEIGHT_ESTIMATE = 40;
 
 
 
 // A tabela recebe dados do componente pai
-const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
+const Tabela: FC<TabelaProps> = ({ data }) => {
 
   // Helper para formatar o status na célula se não for lista simples
   const getStatusColor = (hasError: boolean) => hasError ? '#E53E3E' : '#38A169'; // Vermelho ou Verde
@@ -36,13 +36,13 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
   
   const calculatedHeight = useMemo(() => {
     // cabeçalho + altura de todas as linhas
-    const contentHeight = (data.length) * ROW_HEIGHT_ESTIMATE;
+    const contentHeight = (1 + data.length) * ROW_HEIGHT_ESTIMATE;
 
     // Se a altura calculada for menor que o MÁXIMO, usamos a altura calculada
         // Caso contrário, usamos a altura MÁXIMA para forçar a rolagem.
-        if (contentHeight <= parseFloat(MAX_TABLE_HEIGHT)) {
+        if (contentHeight <= MAX_TABLE_HEIGHT) {
             // Se a altura calculada for muito pequena, garantimos a altura mínima
-            return `${Math.max(contentHeight, parseFloat(MIN_TABLE_HEIGHT))}px`;
+            return `${Math.max(contentHeight, MIN_TABLE_HEIGHT)}px`;
         }
         
         // Se exceder o limite, retorna a altura máxima
@@ -61,10 +61,14 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
       <Table.Root size="md" stickyHeader>
         <Table.Header fontSize="100%" >
           <Table.Row bg="gray.100">
-            {/* ⚠️ LÓGICA DE CABEÇALHO CONDICIONAL */}
-            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="20%">Nº</Table.ColumnHeader>)}
+            {/* ⚠️ LÓGICA DE CABEÇALHO  */}
+            {/* {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="20%">Nº</Table.ColumnHeader>)}
             {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width={isSimpleList ? "80%" : "40%"}>Arquivo</Table.ColumnHeader>)}
-            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Status</Table.ColumnHeader>)}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Status</Table.ColumnHeader>)} */}
+            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="20%">Nº</Table.ColumnHeader>
+            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Arquivo</Table.ColumnHeader>
+            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Status</Table.ColumnHeader>
+          
           </Table.Row>
         </Table.Header>
 
@@ -79,11 +83,9 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
               <Table.Cell color="#036DC5">{item.name} </Table.Cell>
               
               {/* Célula da Mensagem de Status (Cor condicional) */}
-              {!isSimpleList && (
-                <Table.Cell color={getStatusColor((item as StatusData).hasError)} fontWeight={"bold"}>
+              <Table.Cell color={getStatusColor((item as StatusData).hasError)} fontWeight={"bold"}>
                   {(item as StatusData).status}
                 </Table.Cell>
-            )}
               
             </Table.Row>
           ))}
