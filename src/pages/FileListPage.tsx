@@ -1,8 +1,8 @@
 import { Box, Button, Heading, VStack, Flex, IconButton, Text } from '@chakra-ui/react';
 import { FC, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '@/components/ui/Header'; 
-import Footer from '@/components/ui/Footer';
+import Header from '@/components/ui/header'; 
+import Footer from '@/components/ui/footer';
 import { useExtraction } from '@/context/ExtractionContext';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Txtespec from '@/components/ui/TextDescriptions';
@@ -89,7 +89,7 @@ const FileListPage: FC = () => {
                     {/* {isEmpty ? 'Nenhum arquivo carregado' : `${fileListData.length} arquivo(s)` } */}
                 {/* </Heading> */}
                 <Heading size="xl" mb={6}>
-                    {`${fileListData.length} arquivo(s)` }
+                    {`${fileListData.length} arquivo(s) anexados` }
                 </Heading>
 
                 {/* Renderização condicional */}
@@ -129,7 +129,7 @@ const FileListPage: FC = () => {
                             <VStack align="start" w="full"> {/* Removidos p e bg repetidos */}
                                 
                                 {uploadedFilesTemp.map((file, index) => (
-                                    <Flex key={index} justify="space-between" align="center" w="full" p={1} bg="rgba(0,0,0,0.1)" borderRadius="sm">
+                                    <Flex key={index} justify="space-between" align="center" w="full" p={1} bg="rgba(119, 119, 119, 0.03)" borderRadius="sm">
                                         <Text
                                             fontSize={14} 
                                             color="#036DC5" 

@@ -1,10 +1,10 @@
 import { Box, Button, Heading, Flex, Text, VStack, Spinner } from '@chakra-ui/react';
 import { useState, useMemo, FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/ui/Header'; 
-import Footer from '../components/ui/Footer';
+import Header from '../components/ui/header'; 
+import Footer from '../components/ui/footer';
 import SelectBox from '../components/ui/selectbox';
-import Tabela from '@/components/ui/Tabela';
+import Tabela from '@/components/ui/tabela';
 import { useExtraction } from '@/context/ExtractionContext';
 import { FIELD_KEYS, AVAILABLE_FIELDS } from '@/constants/fields';
 import Home from '@/components/ui/Home';
@@ -85,7 +85,7 @@ const ProcessPage: FC = () => {
                 </Flex>
 
                 {/* Informação sobre quantos arquivos foram válidos */}
-                <Text fontSize="lg" mb={8} color={validFilesForReport.length > 0 ? 'gray.800' : 'red.300'}>
+                <Text fontSize="lg" mb={8} color={validFilesForReport.length > 0 ? 'white' : 'red.300'}>
                     {validFilesForReport.length} de {totalProcessedCount} arquivos prontos para o relatório CSV.
                 </Text>
                 

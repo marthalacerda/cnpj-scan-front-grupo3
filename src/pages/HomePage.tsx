@@ -1,7 +1,7 @@
-import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, VStack, Text } from '@chakra-ui/react';
 import { useRef, useState, FC, useEffect } from 'react';
-import Header from '@/components/ui/Header';
-import Footer from '@/components/ui/Footer';
+import Header from '@/components/ui/header';
+import Footer from '@/components/ui/footer';
 import Txtespec from '@/components/ui/TextDescriptions';
 import { useNavigate } from 'react-router-dom';
 import { useExtraction } from '@/context/ExtractionContext';
@@ -107,14 +107,18 @@ const HomePage: FC = () => {
 
                     {/* 🟢 Botão de seleção de arquivo */}
                     <Button
-                        colorPalette="gray"
-                        size="lg"
+                        bg = "white"
+                        size="2xl"
                         onClick={handleButtonClick}
                         loading={isLoading}
+                        shadow="md"
                         loadingText="Carregando arquivos..."
                         variant="surface"
                     >
-                        Selecionar Arquivos PDF
+                    <Text color="#036DC5" fontWeight="bold">
+                            Selecionar Arquivos PDF
+                    </Text>
+                        
                     </Button>
                 </Flex>
             

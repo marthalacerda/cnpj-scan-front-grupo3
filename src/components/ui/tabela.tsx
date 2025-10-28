@@ -53,24 +53,24 @@ const Tabela: FC<TabelaProps> = ({ data, isSimpleList=false }) => {
   return (
     <Table.ScrollArea
       borderWidth="0.5px"
-      borderColor="white"
+      borderColor="gray.200"
       rounded="md"
       height={calculatedHeight}
       width="800px"
     >
       <Table.Root size="md" stickyHeader>
-        <Table.Header fontSize="100%">
-          <Table.Row bg="gray.300">
+        <Table.Header fontSize="100%" >
+          <Table.Row bg="gray.100">
             {/* ⚠️ LÓGICA DE CABEÇALHO CONDICIONAL */}
-            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width="20%">Nº</Table.ColumnHeader>)}
-            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width={isSimpleList ? "80%" : "40%"}>Arquivo</Table.ColumnHeader>)}
-            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" width="40%">Status</Table.ColumnHeader>)}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="20%">Nº</Table.ColumnHeader>)}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width={isSimpleList ? "80%" : "40%"}>Arquivo</Table.ColumnHeader>)}
+            {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Status</Table.ColumnHeader>)}
           </Table.Row>
         </Table.Header>
 
         <Table.Body color="white" fontSize={12}>
           {data.map((item) => (
-            <Table.Row key={item.id} bg="white" borderColor="white">
+            <Table.Row key={item.id} bg="white" borderColor="grey.100">
               
               {/* Coluna ID */}
               <Table.Cell color="#036DC5" fontWeight="bold">{item.id + 1} </Table.Cell>

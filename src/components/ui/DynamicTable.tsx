@@ -8,7 +8,7 @@
 import React, { useState, useEffect, FC, useMemo } from 'react';
 import {
   Box,
-  Button,
+  Center,
   Flex,
   Spinner,
   Text,
@@ -182,21 +182,11 @@ const DynamicTable: FC<DataTableProps> = ({
    * Renderização: Tabela com Dados
    */
   return (
-    <Box w="100%" h="100%">
+    <Box w="100%" maxH="100%">
       {/* Header da Tabela */}
-      <Flex
-        bg="gray.50"
-        px={6}
-        py={4}
-        borderRadius="lg"
-        mb={4}
-        justify="space-between"
-        align="center"
-        flexWrap="wrap"
-      >
-        <Flex align="center" gap="5px">
+        <Center>
           <Box>
-            <Text fontWeight="bold" color= "#036DC5" fontSize="lg">
+            <Text fontWeight="bold" color= "white" fontSize="2xl">
               {title}
             </Text>
             {lastUpdate && (
@@ -205,31 +195,36 @@ const DynamicTable: FC<DataTableProps> = ({
               </Text>
             )}
           </Box>
-        </Flex>
-        <Flex gap="2px">
-        </Flex>
-      </Flex>
+      </Center>
 
       {/* Tabela */}
         <Box
           bg="white"
           borderRadius="lg"
           overflow="hidden"
-          border="0.5px"
+          border="1px"
           borderColor="gray.200"
         >
-          <Box overflowX="auto" maxH="500px" maxW="100%">
-            <Table.Root size="sm" variant="line" tableLayout="fixed">
-              <Table.Header minW="50px">
+          <Box maxH="400px"
+            overflowY="auto"
+            overflowX="auto"
+            position="relative">
+            <Table.Root
+              maxW="1200px"
+              size="sm"
+              variant="line"
+              tableLayout="fixed"
+            >
+              <Table.Header>
                 <Table.Row bg="blue.50">
                   {columns.map((column) => (
                     <Table.ColumnHeader
                       key={column}
                       color="blue.700"
                       fontWeight="bold"
-                      fontSize="sm"
                       textTransform="capitalize"
-                      maxW="50px">
+                      w="100px"
+                    >
                       {column.replaceAll('_', ' ')}
                     </Table.ColumnHeader>
                   ))}
@@ -239,6 +234,7 @@ const DynamicTable: FC<DataTableProps> = ({
               <Table.Body>
                 {tableData.map((row, i) => (
                   <Table.Row
+                    
                     key={i}
                     _hover={{ bg: 'blue.50' }}
                   >
@@ -246,8 +242,7 @@ const DynamicTable: FC<DataTableProps> = ({
                       <Table.Cell
                         key={col}
                         color="gray.700"
-                        maxW="60px"
-                        whiteSpace="nowrap" 
+                        whiteSpace="nowrap"
                         overflow="hidden"
                         textOverflow="ellipsis"
                       >
@@ -260,22 +255,6 @@ const DynamicTable: FC<DataTableProps> = ({
             </Table.Root>
           </Box>
         </Box>
-
-        {/* Footer com contador */}
-        <Flex
-          justify="space-between"
-          align="center"
-          bg="gray.50"
-          borderColor="gray.200"
-        >
-          <Text fontSize="sm" color="gray.600">
-            Total de registros: <strong>{tableData.length}</strong>
-          </Text>
-
-          <Text fontSize="xs" color="gray.500">
-            {columns.length} colunas
-          </Text>
-        </Flex>
     </Box>
   );
 }

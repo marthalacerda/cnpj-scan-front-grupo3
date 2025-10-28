@@ -1,12 +1,10 @@
 import { VStack, Flex, Heading, Box, Text, Center, Spinner, Button } from "@chakra-ui/react";
-
 import { useEffect, useState, useMemo, FC } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
-
 import Home from "../components/ui/Home";
 import DynamicTable from "../components/ui/DynamicTable";
-import Header from '../components/ui/Header';
-import Footer from '../components/ui/Footer';
+import Header from '../components/ui/header';
+import Footer from '../components/ui/footer';
 import DownloadCSV from "../components/ui/DownloadCSV";
 
 import { useExtraction } from "@/context/ExtractionContext";
@@ -98,22 +96,20 @@ const ReportPage: FC = () => {
             <Heading size="3xl" spaceY={-5}>
             Converta PDF para EXCEL
             </Heading>
-            <Text mb="40px" fontSize="md" color="white">
+            <Text mb="20px" fontSize="md" color="white">
             Powered by Cesar School
             </Text>
 
-            <Text fontSize="md" color="white">
-                {validDataCount} de {totalFilesCount} arquivos na tabela a seguir.
-            </Text>
-
             {/* ⚠️ INJEÇÃO 1: Passamos o conteúdo CSV (texto) para a DynamicTable */}
-            <Center>
+            <Center paddingY={8} paddingX={8}>
                 <DynamicTable
                     csvContent={csvContent}
                     selectedFields={selectedFields}
                 />
             </Center>
-
+            <Text fontSize="md" color="white">
+                {validDataCount} de {totalFilesCount} arquivos na tabela criada
+            </Text>
             {/* ⚠️ INJEÇÃO 2: Passamos o conteúdo CSV (texto) e status para o botão de download */}
             <Flex align="top-center" justify="center" gap={7} mt={8}>
 
