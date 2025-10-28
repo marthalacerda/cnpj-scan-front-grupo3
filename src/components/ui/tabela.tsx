@@ -66,8 +66,8 @@ const Tabela: FC<TabelaProps> = ({ data }) => {
             {/* {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="20%">Nº</Table.ColumnHeader>)}
             {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width={isSimpleList ? "80%" : "40%"}>Arquivo</Table.ColumnHeader>)}
             {!isSimpleList && (<Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Status</Table.ColumnHeader>)} */}
-            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="20%">Nº</Table.ColumnHeader>
-            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Arquivo</Table.ColumnHeader>
+            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="10%">Nº</Table.ColumnHeader>
+            <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="50%">Arquivo</Table.ColumnHeader>
             <Table.ColumnHeader color="#036DC5" fontWeight="bold" width="40%">Status</Table.ColumnHeader>
           
           </Table.Row>
@@ -78,13 +78,22 @@ const Tabela: FC<TabelaProps> = ({ data }) => {
             <Table.Row key={item.id} bg="white" borderColor="grey.100">
               
               {/* Coluna ID */}
-              <Table.Cell color="#036DC5" fontWeight="bold">{item.id + 1} </Table.Cell>
+              <Table.Cell color="#036DC5" fontWeight="bold" width="20%">{item.id + 1} </Table.Cell>
 
-              {/* Coluna Nome (compartilhada) */}
-              <Table.Cell color="#036DC5">{item.name} </Table.Cell>
+              {/* Coluna Nome */}
+              <Table.Cell
+                color="#036DC5"
+                whiteSpace="normal"
+                wordBreak="break-word"
+                width="40%"
+              >{item.name} </Table.Cell>
               
               {/* Célula da Mensagem de Status (Cor condicional) */}
-              <Table.Cell color={getStatusColor((item as StatusData).hasError)} fontWeight={"bold"}>
+              <Table.Cell
+                color={getStatusColor((item as StatusData).hasError)}
+                fontWeight={"bold"}
+                width="40%"
+                >
                   {(item as StatusData).status}
                 </Table.Cell>
               
